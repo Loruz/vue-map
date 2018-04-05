@@ -7,10 +7,7 @@
 	   		>
 		    <gmap-marker
 		      :position="position"
-		      :clickable="true"
-		      :draggable="true"
-		      @click="center=m.position"
-		    ></gmap-marker>
+		    ></gmap-marker> 
   		</gmap-map>
   		<div class="map__timer">
   			<div class="map__timer-text">Next set in</div>
@@ -20,32 +17,45 @@
   			<div class="map__info-cord-wrap">
   				<div class="map__info-cord--long">
   					<div class="map__info-text">Longtitude</div>
-  					<div class="map__info-cord-block">{{ position.lng }}</div>
+  					<div class="map__info-cord-block">{{ position.lng | cordsShort }}</div>
   				</div>
   				<div class="map__info-cord--lat">
   					<div class="map__info-text">Latitude</div>
-  					<div class="map__info-cord-block">{{ position.lat }}</div>
+  					<div class="map__info-cord-block">{{ position.lat | cordsShort }}</div>
   				</div>
   			</div>
   			<div class="map__info-long-url">
+  				<label>
+  					Full URL
+  					<input type="text">
+  				</label>
   				
   			</div>
-  			<div class="map__info-shor-url">
-  				
+  			<div class="map__info-short-url">
+  				<label>
+  					Short URL
+  				<input type="text">
+  				</label>
   			</div>
   		</div>
 	</div>
 </template>
 <script>
-
 	export default {
 	data () {
 	      return {
 	      	position: {
 	      		lat: 0, 
 	        	lng: 0,
-	      	}
+	      	},
+	      	longUrl: '',
+	      	shortUrl: ''
 	      }
+	   },
+	   filters: {
+	   	 cordsShort (val) {
+	   	 	return val.toFixed(7)
+	   	 }
 	   },
 	   methods: {
 	   	generateCoordinate () {
@@ -107,6 +117,18 @@
 				padding: 10px;
 				color: $font-color;
 				text-align: center;
+			}
+			&-short-url,
+			&-long-url {
+				color: $font-color;
+				margin-top: 15px;
+				input {
+					width: 100%;
+					margin-top: 15px;
+					padding: 10px;
+					font-size: 18px;
+					color: $font-color;
+				}
 			}
 		}
 	}
