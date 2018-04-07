@@ -3,7 +3,7 @@
 		<gmap-map
 			class="google-map"
 	    	:center="position"
-	   	 	:zoom="5"
+	   	 	:zoom="10"
 	   		>
 		    <gmap-marker
 		      :position="position"
@@ -27,20 +27,21 @@
   			<div class="map__info-long-url">
   				<label>
   					Full URL
-  					<input type="text">
+  					<input type="text" :value="longUrl">
   				</label>
   				
   			</div>
   			<div class="map__info-short-url">
   				<label>
   					Short URL
-  				<input type="text">
+  				<input type="text"  :value="shortUrl">
   				</label>
   			</div>
   		</div>
 	</div>
 </template>
 <script>
+	import {shortenURL} from 'gapi-url'
 	export default {
 	data () {
 	      return {
@@ -49,7 +50,8 @@
 	        	lng: 0,
 	      	},
 	      	longUrl: '',
-	      	shortUrl: ''
+	      	shortUrl: '',
+	      	shortUrlKey: 'AIzaSyDoMGDS0J-ab1Q3nqgXfk5IUXfJHD7Utys'
 	      }
 	   },
 	   filters: {
@@ -59,9 +61,19 @@
 	   },
 	   methods: {
 	   	generateCoordinate () {
-	   		this.position.lng = Math.random() * 180
-	   		this.position.lat = Math.random() * 90
-	   	}
+	   		this.position.lng = parseFloat(this.getRandom(-10,50,7).toFixed(7))
+	   		this.position.lat = parseFloat(this.getRandom(0,70,7).toFixed(7))
+	   		this.longUrl = `https://www.google.lt/maps/@${this.position.lat},${this.position.lng},10z?hl=en`
+	   		this.makeShortUrl(this.longUrl)
+	   	},
+	   	makeShortUrl (url) {
+	   		 shortenURL(this.shortUrlKey, url, (err, short) => {
+	   			this.shortUrl = short
+	   		})
+	   	},
+	   	getRandom(from, to, fixed) {
+		    return (Math.random() * (to - from) + from).toFixed(fixed) * 1
+		}
 	   },
 	   mounted () {
 	   		this.generateCoordinate()
